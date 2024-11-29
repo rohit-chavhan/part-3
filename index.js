@@ -1,6 +1,17 @@
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
 app.use(express.json());
+
+morgan.token('len', (req) => req.headers['content-length']);
+
+morgan.token('body', (req) =>
+  req.method === 'POST' ? JSON.stringify(req.body) : ''
+);
+
+morgan.token('status', (req, res) => res.statusCode);
+
+app.use(morgan(':method :url :status :len :response-time ms :body'));
 
 let phoneBook = [
   {
@@ -24,10 +35,6 @@ let phoneBook = [
     number: '39-23-6423122',
   },
 ];
-
-app.get('/', (request, response) => {
-  response.send('<h1> hello world </h1>');
-});
 
 app.get('/api/persons', (request, response) => {
   response.json(phoneBook);
