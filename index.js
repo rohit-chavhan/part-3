@@ -1,7 +1,9 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 morgan.token('len', (req) => req.headers['content-length']);
 
@@ -105,7 +107,7 @@ app.post('/api/persons', (request, response) => {
   phoneBook = phoneBook.concat(person);
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`port listening on ${PORT} port`);
 });
