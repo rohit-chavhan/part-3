@@ -39,6 +39,8 @@ let phoneBook = [
   },
 ];
 
+app.get('/', (request, response) => response.send('<h1>Hello world </h1>'));
+
 app.get('/api/persons', (request, response) => {
   response.json(phoneBook);
 });
@@ -54,7 +56,8 @@ app.get('/info', (request, response) => {
 });
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = request.params.id;
+  const id = Number(request.params.id);
+  console.log(typeof id);
 
   const person = phoneBook.find((contact) => contact.id === id);
   if (person) {
@@ -66,7 +69,7 @@ app.get('/api/persons/:id', (request, response) => {
 
 const generateId = () => {
   const random =
-    Math.floor(Math.random() * (phoneBook.length * 3)) + phoneBook.length;
+    Math.floor(Math.random() * (phoneBook.length * 4)) + phoneBook.length;
   return random;
 };
 
