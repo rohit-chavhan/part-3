@@ -73,6 +73,7 @@ const generateId = () => {
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id;
   const person = phoneBook.filter((contact) => contact.id !== id);
+  phoneBook = person;
   response.status(204).end();
 });
 
