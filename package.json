@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev": "nodemon --inspect index.js",
     "build:ui": "rm -rf dist && cd ../try-ons/../full-stack-open-2024/part2/phonebook/ && npm run build && cp -r dist ../../../part-3/",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push origin main",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +14,9 @@
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1",
+    "mongoose": "^8.8.3",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
