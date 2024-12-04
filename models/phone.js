@@ -1,18 +1,19 @@
-import { set, connect, Schema, model } from 'mongoose';
+const mongoose = require('mongoose');
 
-set('strictQuery', false);
+mongoose.set('strictQuery', false);
 
 const url = process.env.MONGODB_URI;
 
 console.log('connecting to', url);
 
-connect(url)
+mongoose
+  .connect(url)
   .then((result) => {
     console.log('connected to Mongodb');
   })
   .catch((err) => console.log(`error connecting to Mongodb:`, err.message));
 
-const contactSchema = new Schema({
+const contactSchema = new mongoose.Schema({
   name: String,
   number: Number,
 });
@@ -25,4 +26,4 @@ contactSchema.set('toJSON', {
   },
 });
 
-export default model('Contact', contactSchema);
+module.exports = mongoose.model('Contact', contactSchema);
