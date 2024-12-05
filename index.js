@@ -20,8 +20,6 @@ morgan.token('status', (req, res) => res.statusCode)
 
 app.use(morgan(':method :url :status :len :response-time ms :body'))
 
-app.get('/', (request, response) => response.send('<h1>Hello world </h1>'))
-
 app.get('/api/persons', (request, response) => {
   Contact.find({}).then((contacts) => {
     response.json(contacts)
@@ -52,16 +50,13 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  console.log('deleted')
-
   Contact.findByIdAndDelete(request.params.id)
-    .then((result) => response.status(204).end())
+    .then(() => response.status(204).end())
     .catch((error) => next(error))
 })
 
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
-  console.log(body)
 
   if (!body.name) {
     return response.status(400).json({
@@ -75,29 +70,28 @@ app.post('/api/persons', (request, response, next) => {
     })
   }
 
-  Contact.find({}).then((res) => {
-    let value = res.filter((obj) => obj.name === body.name)
-    console.log(value)
-
-    if (value.length > 0) {
-      const person = {
-        name: value[0].name,
-        number: body.number,
-      }
-      Contact.findByIdAndUpdate(value[0].id, person, { new: true })
-        .then((updateContact) => response.json(updateContact))
-        .catch((error) => next(error))
-    } else {
-      const person = new Contact({
-        name: body.name,
-        number: body.number,
-      })
-
-      person.save().then((saveContact) => {
-        response.json(saveContact)
-      })
-    }
+  const contact = new Contact({
+    name: body.name,
+    number: body.number,
   })
+
+  contact
+    .save()
+    .then((saveContact) => response.json(saveContact))
+    .catch((err) => next(err))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const contact = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Contact.findByIdAndUpdate(request.params.id, contact, { new: true })
+    .then((updateCont) => response.json(updateCont))
+    .catch((err) => next(err))
 })
 
 const unknownEndpoint = (request, response) => {
@@ -107,14 +101,13 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
-  console.log(error.message, error.name, 'ursrttd')
-
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   }
+  return response.status(500).end()
 }
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => console.log(`port listening on ${PORT} port`))
