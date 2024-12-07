@@ -8,10 +8,10 @@ console.log('connecting to', url)
 
 mongoose
   .connect(url)
-  .then((result) => {
+  .then(() => {
     console.log('connected to Mongodb')
   })
-  .catch((err) => console.log(`error connecting to Mongodb:`, err.message))
+  .catch((err) => console.log('error connecting to Mongodb:', err.message))
 
 const contactSchema = new mongoose.Schema({
   name: {
