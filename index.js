@@ -78,7 +78,9 @@ app.post('/api/persons', (request, response, next) => {
   contact
     .save()
     .then((saveContact) => response.json(saveContact))
-    .catch((err) => next(err))
+    .catch((err) => {
+      next(err)
+    })
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -104,9 +106,11 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   }
+  if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: `${error}` })
+  }
   return response.status(500).end()
 }
-
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001

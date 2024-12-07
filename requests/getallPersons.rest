@@ -16,7 +16,7 @@ Content-Type: application/json
 
 {
     "name":"honda",
-    "number":"909"
+    "number":"1234556"
 }
 
 ########################################
@@ -25,9 +25,18 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name":"x",
-    "number":"00"
+    "name":"rzeadison",
+    "number": "09-1234556"
+
 }
+
+# 09-1234556
+# 040-22334455
+
+# 1234556
+#  1-22334455
+#  10-22-334455
+
 
 ##########################################
 
